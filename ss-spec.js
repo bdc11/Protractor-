@@ -11,24 +11,32 @@ describe('When testing the shopstyle website', function() {
     });
 
     var ss_home_page = require('./pageObject/ss_home_page.js');
+    var megaHeaderChoices = require('./pageObject/header_table.js');
+    var using = require('jasmine-data-provider');
 
-    it ("a user should be able to click on megaheaders", function() {
-        element(by.cssContainingText('a.nav-top-link', 'Men')).getAttribute("href").then(function(text) {
-            console.log(text);
+
+   using(megaHeaderChoices.megaheaders, function (headers) {
+
+        it ("a user should be able to click on megaheaders", function() {
+            element(by.cssContainingText('a.nav-top-link', headers)).getAttribute("href").then(function(text) {
+                console.log(text);
+                ss_home_page.megaHeaders(headers);
+                browser.sleep(1100);
+                expect(browser.driver.getCurrentUrl()).toEqual(text);
+            });
         });
-        ss_home_page.megaHeaders("Men");
-    });
-
-    it ("a user should be able to use the search bar", function() {
-        ss_home_page.searchBar('gucci');
-        element(by.css("ss-svg-icon.search-icon")).click();
-        ss_home_page.mouseOver();
     });
 
     it ("a user should be able to click on secondary headers", function() {
         ss_home_page.megaHover('Women');
         browser.sleep(1000);
         ss_home_page.secondaryHeaders('Activewear')
+    });
+
+    it ("a user should be able to use the search bar", function() {
+        ss_home_page.searchBar('gucci');
+        element(by.css("ss-svg-icon.search-icon")).click();
+        ss_home_page.mouseOver();
     });
 
     it ("a user should be able to click on color filters", function() {
@@ -105,8 +113,21 @@ describe('When testing the shopstyle website', function() {
         element(by.css('input.full-width.email-input')).sendKeys(""+userEmail+"");
         element(by.css('input.full-width.password-input')).sendKeys(""+userPassword+"");
         element(by.css("button.submit-button")).click();
-        browser.sleep(1000);
+        browser.sleep(1200);
         ss_home_page.checkIfLoggedIn();
+    });
+
+    it ("a user should see that the price is the same for the product cell and product page", function() {
+        ss_home_page.megaHeaders("Men");
+        var cellPrice = element.all(by.css("div.product-cell-container")).get(0).element(by.css(".product-price")).getText().then(function(cellPrice) {
+        console.log("first cell item price is "+cellPrice+"");
+        ss_home_page.seeProductPage();
+        var pagePrice = element(by.css("span.price")).getText().then(function(productPrice) {
+            console.log("first product page item price is "+productPrice+"");
+            console.log("found two prices: "+cellPrice+" and "+productPrice+" ")
+            expect(cellPrice).toEqual(productPrice);
+            });
+        });
     });
 
     it ("a user can click on Buy Now from product page to redirect to retailer website", function() {
@@ -116,6 +137,5 @@ describe('When testing the shopstyle website', function() {
         element(by.css(".buy-button")).click();
         browser.sleep(1000);
     });
-
 
 });
