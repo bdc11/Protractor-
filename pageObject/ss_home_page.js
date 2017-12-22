@@ -29,6 +29,9 @@ var ss_home_page = function() {
 
     this.megaHeaders = function(mega) {
         element(by.cssContainingText('a.nav-top-link', mega)).click();
+        browser.executeScript('window.scrollTo(0,10000);').then(function () {
+            console.log('scrolling down to dismiss header and put cells into view');
+        });
     };
 
     this.megaHover = function(hover) {
@@ -97,11 +100,3 @@ var ss_home_page = function() {
 
 };
 module.exports = new ss_home_page();
-
-
-//     this.clickContinue = function() {
-//         element(by.buttonText('CONTINUE')).click();
-//         return require('./animal_page.js'); //returns a reference to this page object
-//     };
-
-// };
