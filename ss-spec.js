@@ -11,11 +11,11 @@ describe('When testing the shopstyle website', function() {
     });
 
     var ss_home_page = require('./pageObject/ss_home_page.js');
-    var megaHeaderChoices = require('./pageObject/header_table.js');
+    var dataTable = require('./pageObject/header_table.js');
     var using = require('jasmine-data-provider');
 
 
-   using(megaHeaderChoices.megaheaders, function (headers) {
+    using(dataTable.megaheaderChoices, function (headers) {
 
         it ("a user should be able to click on megaheaders", function() {
             element(by.cssContainingText('a.nav-top-link', headers)).getAttribute("href").then(function(text) {
@@ -25,6 +25,51 @@ describe('When testing the shopstyle website', function() {
                 expect(browser.driver.getCurrentUrl()).toEqual(text);
             });
         });
+    });
+
+    // WIP TODO
+    //    using(dataTable.secondLevelHeaders, function (headers, second) {
+
+    //     it ("a user should be able to click on megaheaders", function() {
+    //         // element(by.cssContainingText('a.nav-top-link', headers)).getAttribute("href").then(function(text) {
+    //         //     console.log(text);
+    //             ss_home_page.megaHover(headers);
+    //             browser.sleep(1000);
+    //             ss_home_page.secondaryHeaders(second);
+    //             // browser.sleep(1100);
+    //             // expect(browser.driver.getCurrentUrl()).toEqual(text);
+    //         // });
+    //     });
+    // });
+
+       using(dataTable.secondLevelHeaders, function (headers, second) {
+
+        it ("a user should be able to click on megaheaders", function() {
+                ss_home_page.megaHover(headers);
+                browser.sleep(1000);
+                ss_home_page.secondaryHeaders(second);
+        });
+    });
+
+
+    using(dataTable.colorSideFilters, function (colors) {
+
+        it ("a user should be able to click on color filters", function() {
+            element(by.css("ss-svg-icon.search-icon")).click();
+
+            var colorFilter = element(by.cssContainingText("h6", "Brand"));
+            ss_home_page.scrollTo(colorFilter); //scroll color filter into view
+            browser.sleep(1500);
+            ss_home_page.mouseOver();
+            ss_home_page.dismissBottomBanner();
+
+            element(by.css("label[for='"+colors+"']")).element(by.css("a")).getAttribute("href").then(function(text) {
+                 console.log(text);
+                 ss_home_page.colorFilter(colors);
+                 browser.sleep(1500);
+                 expect(browser.driver.getCurrentUrl()).toEqual(text);
+            });
+        });   
     });
 
     it ("a user should be able to click on secondary headers", function() {
@@ -113,7 +158,7 @@ describe('When testing the shopstyle website', function() {
         element(by.css('input.full-width.email-input')).sendKeys(""+userEmail+"");
         element(by.css('input.full-width.password-input')).sendKeys(""+userPassword+"");
         element(by.css("button.submit-button")).click();
-        browser.sleep(1200);
+        browser.sleep(1500);
         ss_home_page.checkIfLoggedIn();
     });
 
@@ -135,7 +180,6 @@ describe('When testing the shopstyle website', function() {
         element(by.css("ss-svg-icon.search-icon")).click();
         ss_home_page.seeProductPage();
         element(by.css(".buy-button")).click();
-        browser.sleep(1000);
+        browser.sleep(2500);
     });
-
 });

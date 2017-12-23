@@ -2,6 +2,15 @@
 
 var ss_home_page = function() {
 
+    this.dismissBottomBanner = function(value) {
+        
+        element(by.css("div.slide-up-banner.animate.promo.banner-active")).isPresent().then(function(banner) {
+            if (banner == true) {
+                element(by.css("div.slide-up-banner")).element(by.css("svg")).click();
+            }
+        });
+    };
+
     this.searchBar = function(value) {
         element(by.css("input.search-input")).sendKeys(value);
     };
