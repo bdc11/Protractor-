@@ -20,8 +20,9 @@ var ss_home_page = function() {
     };
 
     this.mouseOver = function() {
+        browser.sleep(1000);
         browser.actions().mouseMove(element(by.buttonText('Sign Up'))).perform(); //dismiss modal
-        browser.sleep(5000);
+        browser.sleep(1000);
     };
 
     this.scrollTo = function(choice) {
@@ -38,9 +39,9 @@ var ss_home_page = function() {
 
     this.megaHeaders = function(mega) {
         element(by.cssContainingText('a.nav-top-link', mega)).click();
-        browser.executeScript('window.scrollTo(0,10000);').then(function () {
-            console.log('scrolling down to dismiss header and put cells into view');
-        });
+        // browser.executeScript('window.scrollTo(0,10000);').then(function () {
+        //     console.log('scrolling down to dismiss header and put cells into view');
+        // });
     };
 
     this.megaHover = function(hover) {
@@ -49,7 +50,7 @@ var ss_home_page = function() {
 
     this.secondaryHeaders = function(second) {
         // megaHover('Women');
-        element(by.cssContainingText('a.menu-link', second)).click();
+        element.all(by.cssContainingText('a.menu-link', second)).get(0).click();
     };
 
     this.brandFilter = function(brand) {
@@ -62,16 +63,20 @@ var ss_home_page = function() {
     };
 
     this.seeProductPage = function() {
-        var productCell = element(by.css("div.product-cell-container"));
-        var magnifyingGlass = element(by.css("div.product-cell-container")).element(by.css("ss-svg-icon")).isDisplayed();
+        var productCell = element.all(by.css("div.product-cell-container")).get(0);
+        var magnifyingGlass = element.all(by.css("div.product-cell-container")).get(0).element(by.css("ss-svg-icon")).isDisplayed();
 
         productCell.element(by.css(".zoom-icon")).isPresent().then(function(magnifyGlass) {
             if (magnifyGlass == true) {
-                element(by.css("div.product-cell-container")).element(by.css("ss-svg-icon")).click();
+                productCell.element(by.css("ss-svg-icon")).click();
 
             } else {
-                element(by.css("div.product-cell-container")).element(by.css("a.product-name")).click();
+                productCell.element(by.css("a.product-name")).click();
             }
+        });
+
+        browser.getCurrentUrl().then(function(url){
+            console.log("==>Printing out product url for debug: "+url+" ");
         });
     };
 
@@ -102,7 +107,7 @@ var ss_home_page = function() {
     };
 ///
     this.checkIfLoggedIn = function() {
-        element(by.css("div.user-link")).$("span").getText().then(function(login) {
+        element.all(by.css("div.user-link")).get(0).$("span").getText().then(function(login) {
         expect(login).toBe("You");
         });
     };
