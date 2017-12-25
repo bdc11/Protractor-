@@ -64,11 +64,11 @@ var ss_home_page = function() {
 
     this.seeProductPage = function() {
         var productCell = element.all(by.css("div.product-cell-container")).get(0);
-        var magnifyingGlass = element.all(by.css("div.product-cell-container")).get(0).element(by.css("ss-svg-icon")).isDisplayed();
+        var magnifyGlass = element.all(by.css("div.product-cell-container")).get(0).element(by.css("a.detail-link"));
 
-        productCell.element(by.css(".zoom-icon")).isPresent().then(function(magnifyGlass) {
-            if (magnifyGlass == true) {
-                productCell.element(by.css("ss-svg-icon")).click();
+        productCell.element(by.css(".zoom-icon")).isPresent().then(function(zoomIcon) {
+            if (zoomIcon == true) {
+                magnifyGlass.click();
 
             } else {
                 productCell.element(by.css("a.product-name")).click();

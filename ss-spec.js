@@ -31,20 +31,20 @@ describe('When testing the shopstyle website', function() {
         }); 
     });
 
-    // WIP TODO
-    //    using(dataTable.secondLevelHeaders, function (headers, second) {
+    // // WIP TODO
+    // //    using(dataTable.secondLevelHeaders, function (headers, second) {
 
-    //     it ("a user should be able to click on megaheaders", function() {
-    //         // element(by.cssContainingText('a.nav-top-link', headers)).getAttribute("href").then(function(text) {
-    //         //     console.log(text);
-    //             ss_home_page.megaHover(headers);
-    //             browser.sleep(1000);
-    //             ss_home_page.secondaryHeaders(second);
-    //             // browser.sleep(1100);
-    //             // expect(browser.driver.getCurrentUrl()).toEqual(text);
-    //         // });
-    //     });
-    // });
+    // //     it ("a user should be able to click on megaheaders", function() {
+    // //         // element(by.cssContainingText('a.nav-top-link', headers)).getAttribute("href").then(function(text) {
+    // //         //     console.log(text);
+    // //             ss_home_page.megaHover(headers);
+    // //             browser.sleep(1000);
+    // //             ss_home_page.secondaryHeaders(second);
+    // //             // browser.sleep(1100);
+    // //             // expect(browser.driver.getCurrentUrl()).toEqual(text);
+    // //         // });
+    // //     });
+    // // });
 
     it ("a user should be able to click on secondary headers", function() {
         ss_home_page.megaHover('Women');
@@ -157,7 +157,7 @@ describe('When testing the shopstyle website', function() {
                 var cellPrice = element.all(by.css("div.product-cell-container")).get(0).element(by.css(".product-price.deal")).getText().then(function(cellPrice) {
                 console.log("first cell item price is "+cellPrice+"");
                 ss_home_page.seeProductPage();
-                    var pagePrice = element(by.css("span.price")).getText().then(function(productPrice) {
+                    var pagePrice = element.all(by.css("span.price")).get(0).getText().then(function(productPrice) {
                     console.log("first product page item price is "+productPrice+"");
                     console.log("found two prices: cell price = "+cellPrice+" and page price = "+productPrice+" ")
                     expect(cellPrice).toEqual(productPrice);
@@ -168,7 +168,7 @@ describe('When testing the shopstyle website', function() {
                 var cellPrice = element.all(by.css("div.product-cell-container")).get(0).element(by.css(".product-price")).getText().then(function(cellPrice) {
                 console.log("first cell item price is "+cellPrice+"");
                 ss_home_page.seeProductPage();
-                    var pagePrice = element(by.css("span.price")).getText().then(function(productPrice) {
+                    var pagePrice = element.all(by.css("span.price")).get(0).getText().then(function(productPrice) {
                     console.log("first product page item price is "+productPrice+"");
                     console.log("found two prices: cell price = "+cellPrice+" and page price = "+productPrice+" ")
                     expect(cellPrice).toEqual(productPrice);
