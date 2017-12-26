@@ -112,5 +112,36 @@ var ss_home_page = function() {
         });
     };
 
+    this.saveSearch = function() {
+        element(by.css("div.right-results-container")).element(by.css("ss-qsa-button")).click();
+        browser.sleep(1000);
+    };
+
+    this.inputNewUser = function() {
+        var randomNumbers = Math.random().toString(36).substring(7).toString();
+        var userEmail = "bc" + randomNumbers + "@gmail.com";
+        var userPassword = "Password1"
+        element(by.css("button.step-button")).isPresent().then(function(button) {
+            if (button == true) {
+                element(by.css('input.full-width.email-input')).sendKeys(""+userEmail+"");
+                $("button.step-button").click();
+                element(by.css('input.full-width.password-input')).sendKeys(""+userPassword+"");
+                $("button.step-button").click();
+
+            } else {
+                element(by.css('input.full-width.email-input')).sendKeys(""+userEmail+"");
+                element(by.css('input.full-width.password-input')).sendKeys(""+userPassword+"");
+                element(by.css("button.submit-button")).click();
+            }
+        });
+
+        element(by.css('.close-button')).isPresent().then(function(close) {
+            if (close == true) {
+                element(by.css('.close-button')).click();
+            } 
+        });
+
+    };
+    // browser.sleep(1500);
 };
 module.exports = new ss_home_page();

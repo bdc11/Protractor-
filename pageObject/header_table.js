@@ -12,16 +12,13 @@ module.exports = {
     ]
 }
 
-//WIP TODO
+
 // module.exports = {
-//     secondLevelHeaders: [
-//         'Women': {second: 'Activewear'},
-//         'Shoes'
-//         // 'Bags',
-//         // 'Accessories',
-//         // 'Men',
-//         // 'Beauty',
-//         // 'Kids',
-//         // 'Home'
-//     ]
+//   params: {
+//     secondLevelHeaders: {
+//       header: 'Women',
+//       second: 'Activewear'
+//     }
+//   },
+//     //  * other config options *
 // }
