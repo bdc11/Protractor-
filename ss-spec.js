@@ -11,12 +11,16 @@ describe('When testing the shopstyle website', function() {
     });
 
     afterEach(function() {
-      browser.restart()
+      // browser.restart()
+      browser.driver.manage().deleteAllCookies();
     });
 
     var ss_home_page = require('./pageObject/ss_home_page.js');
     var headerTable = require('./pageObject/header_table.js');
+    var secondHeaders = require('./pageObject/second_header_table.js');
+    var applyingDiscount = require('./pageObject/discount_table.js');
     var colorTable = require('./pageObject/color_filters.js');
+    var brandTable = require('./pageObject/brand_table.js');
     var using = require('jasmine-data-provider');
 
     using(headerTable.megaheaderPick, function (headers) {
@@ -25,26 +29,25 @@ describe('When testing the shopstyle website', function() {
             element(by.cssContainingText('a.nav-top-link', headers)).getAttribute("href").then(function(text) {
                 console.log(text);
                 ss_home_page.megaHeaders(headers);
-                browser.sleep(2200);
+                // browser.sleep(2500);
+                browser.waitForAngular();
                 expect(browser.driver.getCurrentUrl()).toEqual(text);
             });
         }); 
     });
 
-    // // WIP TODO
-    // //    using(dataTable.secondLevelHeaders, function (headers, second) {
+    // WIP TODO
 
-    // //     it ("a user should be able to click on megaheaders", function() {
-    // //         // element(by.cssContainingText('a.nav-top-link', headers)).getAttribute("href").then(function(text) {
-    // //         //     console.log(text);
-    // //             ss_home_page.megaHover(headers);
-    // //             browser.sleep(1000);
-    // //             ss_home_page.secondaryHeaders(second);
-    // //             // browser.sleep(1100);
-    // //             // expect(browser.driver.getCurrentUrl()).toEqual(text);
-    // //         // });
-    // //     });
-    // // });
+        it ("a user should be able to click on megaheaders", function() {
+             element(by.cssContainingText('a.menu-link', secondHeaders.secondLevelHeaders.second)).getAttribute("href").then(function(text) {
+                console.log(text);
+                ss_home_page.megaHover(secondHeaders.secondLevelHeaders.header);
+                browser.sleep(1500);
+                ss_home_page.secondaryHeaders(secondHeaders.secondLevelHeaders.second);
+                browser.sleep(1500);
+                expect(browser.driver.getCurrentUrl()).toEqual(text);
+            });
+        });
 
     it ("a user should be able to click on secondary headers", function() {
         ss_home_page.megaHover('Women');
@@ -78,17 +81,52 @@ describe('When testing the shopstyle website', function() {
         });   
     });
     
+    using(applyingDiscount.selectDiscount, function (checkDiscount) {
 
-    it ("a user should be able to click on price filters", function() {
-        element(by.css("ss-svg-icon.search-icon")).click();
-        var priceFilter = element(by.cssContainingText("h6", "Size"));
-        ss_home_page.scrollTo(priceFilter);
-        ss_home_page.mouseOver();
-        ss_home_page.discountFilter('0discount');
-        browser.sleep(2500);
-        element.all(by.css(".struckout")).get(0).isDisplayed().then(function(discount) {
-            expect(discount);
+        it ("a user should be able to apply price filters", function() {
+            element(by.css("ss-svg-icon.search-icon")).click();
+            var priceFilter = element(by.cssContainingText("h6", "Size"));
+            ss_home_page.scrollTo(priceFilter);
+            ss_home_page.mouseOver();
+            browser.sleep(1000);
+            ss_home_page.discountFilter(checkDiscount);
+            // browser.sleep(2500);
+            browser.waitForAngular();
+            element.all(by.css(".struckout")).get(0).isDisplayed().then(function(discount) {
+                expect(discount);
+            });
         });
+    });
+
+    using(brandTable.selectBrand, function (brands) {
+        it ("a user should be able to apply the brands filter", function() {
+            element(by.css("ss-svg-icon.search-icon")).click();
+            var brandFilter = element(by.cssContainingText("h6", "Price & Deals"));
+            ss_home_page.scrollTo(brandFilter);
+            ss_home_page.mouseOver();
+            browser.sleep(1000);
+            ss_home_page.brandFilter(brands);
+            // browser.sleep(2500);
+            // element.all(by.css(".struckout")).get(0).isDisplayed().then(function(discount) {
+            //     expect(discount);
+            // });
+        });
+    });
+
+    it ("a new user can save a current search", function() {
+        element(by.css("ss-svg-icon.search-icon")).click();
+        ss_home_page.saveSearch();
+        ss_home_page.inputNewUser();
+
+        expect(element(by.css('div.text.saved')).isPresent()).toBe(true); //checking search is saved
+
+        element(by.css('div.search-header')).element(by.css('.heart-icon')).click();
+        browser.sleep(1500);
+        element(by.cssContainingText('a', 'My Saved Searches')).click();
+        browser.sleep(1500);
+
+        expect(element(by.css('ss-saved-search-card')).isPresent()).toBe(true); //checking search is saved-search page
+
     });
 
     it ("a user should be able to use the See All Stores button", function() {
@@ -112,21 +150,9 @@ describe('When testing the shopstyle website', function() {
         ss_home_page.mouseOver();
         ss_home_page.seeProductPage();
         element.all(by.css(".label")).get(0).click();
-        browser.sleep(1000);
-
-        element(by.css("button.step-button")).isPresent().then(function(button) {
-            if (button == true) {
-                element(by.css('input.full-width.email-input')).sendKeys(""+userEmail+"");
-                $("button.step-button").click();
-                element(by.css('input.full-width.password-input')).sendKeys(""+userPassword+"");
-                $("button.step-button").click();
-
-            } else {
-                element(by.css('input.full-width.email-input')).sendKeys(""+userEmail+"");
-                element(by.css('input.full-width.password-input')).sendKeys(""+userPassword+"");
-                element(by.css("button.submit-button")).click();
-            }
-        });
+        browser.waitForAngular();
+        ss_home_page.inputNewUser();
+        expect(element(by.css("a.save-item-button.active")).isPresent()).toBe(true); //check button is active
     });
 
     it ("a new user can use the Get Sale Alert from product cell to favorite items", function() {
