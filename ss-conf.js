@@ -21,5 +21,3 @@ exports.config = {
     }));
   }
 }
-
-
