@@ -1,6 +1,8 @@
 'use strict';
 module.exports = {
     gliffyFooters: [
+        'Support Desk', 
+        'User Manual',
         'Legal',
         'Jobs',
         // 'Sitemap',
