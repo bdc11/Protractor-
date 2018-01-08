@@ -8,7 +8,6 @@ describe('When testing the gliffy website', function() {
     beforeEach(function() {
       browser.driver.get("https://www.gliffy.com/");
       browser.ignoreSynchronization = true;
-      // browser.sleep(1000);
     });
 
     afterEach(function() {
@@ -19,7 +18,6 @@ describe('When testing the gliffy website', function() {
     var using = require('jasmine-data-provider');
     var gliffy_setup = require('./gliffyPageObject/gliffy_setup.js');
     var diagramTable = require('./gliffyPageObject/newDiagramTable.js');
-    var newTabFooters = require('./gliffyPageObject/homepageNewTabFooters.js');
     var homepageFooters = require('./gliffyPageObject/homepageFooters.js');
     var megaHeaders = require('./gliffyPageObject/gliffyMegaHeaders.js');
     var allMegaHeaders = require('./gliffyPageObject/mainMegaHeaders.js');
@@ -91,7 +89,7 @@ describe('When testing the gliffy website', function() {
         element(by.cssContainingText('a', 'Pricing')).click();
         browser.sleep(1000);
         var professionalPlan = element.all(by.css('.plan-padding')).get(0);
-        
+
         professionalPlan.element(by.css('a')).getAttribute("href").then(function(href) {
             console.log(href);
             professionalPlan.element(by.css('a.hs-btn-blue')).click();
@@ -114,40 +112,53 @@ describe('When testing the gliffy website', function() {
         }); 
     });
 
-    using(newTabFooters.newPageFooters, function (footerLinks) {
+    using(homepageFooters.gliffyFooters, function (footerLinks) {
        it ("visiters can use the "+footerLinks+" footer link on the homepage", function() {
             var viewfooters = element(by.cssContainingText('h4', 'Useful Links'));
             gliffy_setup.scrollTo(viewfooters);
-            browser.sleep(5000);
 
             element(by.cssContainingText('a', footerLinks)).getAttribute("href").then(function(footerHref) {
                 console.log(footerHref);
                 element(by.cssContainingText('a', footerLinks)).click();
                 
-                browser.getAllWindowHandles().then(function (handles) {
-                    newWindowHandle = handles[1]; // this is your new window
-                    browser.switchTo().window(newWindowHandle).then(function () {
-                        expect(browser.driver.getCurrentUrl()).toEqual(footerHref);
-                        browser.restart()
-                    });
-                });
+                switch (footerLinks) {
+                    case "Support Desk":
+                        gliffy_setup.checkNewTabPath(footerHref); 
+
+                    case "User Manual":
+                        gliffy_setup.checkNewTabPath(footerHref);
+
+                    default: 
+                        gliffy_setup.checkPath(footerHref);  
+                }
         });
     });
     });
 
-    using(homepageFooters.gliffyFooters, function (footerPick) {
-       it ("visiters can use the "+footerPick+" footer link on the homepage", function() {
+    //WIP
+    it ("visiters click on all footer looks and redirected to corresponding page", function() {
             var viewfooters = element(by.cssContainingText('h4', 'Useful Links'));
             gliffy_setup.scrollTo(viewfooters);
-            browser.sleep(5000);
+            browser.sleep(1500);          
 
-            var footerSection = element(by.css('div.row-fluid'));
-            element(by.cssContainingText('a', footerPick)).getAttribute("href").then(function(footer) {
-                console.log(footer);
-                element(by.cssContainingText('a', footerPick)).click();
-                // expect(browser.driver.getCurrentUrl()).toEqual(footer);  
-        });
-    });
+            // element.all(by.css('.footer_col3 a')).each(function (size) { 
+            //     size.getText().then(function (array) {
+            //     console.log(array);
+            // });
+            // });
+
+            element.all(by.css('.footer_col3 a')).then(function(size){
+                console.log(size.length);
+
+                var footerArray = size.length
+                
+                for (var i = 0; i < size.length; ++i) {
+                    element.all(by.css('.footer_col3 a')).get([i]).click();
+                }
+            });
+
+            browser.sleep(2000);
+                
     });
 
 });
