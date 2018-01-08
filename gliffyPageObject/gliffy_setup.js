@@ -1,5 +1,9 @@
 var gliffy_setup = function() {
 
+    this.goToGliffyHomePage = function(choice) {
+        browser.driver.get("https://www.gliffy.com/");
+    };
+
 	this.scrollTo = function(choice) {
         browser.executeScript("arguments[0].scrollIntoView();", choice.getWebElement());
     };
@@ -30,6 +34,20 @@ var gliffy_setup = function() {
             element(by.css('.submit-button')).click();
             browser.sleep(5000);
         });
+    };
+
+    this.checkPath = function(path) {
+        expect(browser.driver.getCurrentUrl()).toEqual(path);
+    };
+
+    this.checkNewTabPath = function(tab) {
+        browser.getAllWindowHandles().then(function (handles) {
+            newWindowHandle = handles[1]; // this is your new window
+            browser.switchTo().window(newWindowHandle).then(function () {
+                expect(browser.driver.getCurrentUrl()).toEqual(tab);
+            });
+        });
+        // browser.restart()
     };
 };
 module.exports = new gliffy_setup();
